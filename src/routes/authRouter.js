@@ -15,24 +15,20 @@ router.get("/login", function (req, res) {
 });
 
 // authentication api
-router.post(
-  "/login",
-  passport.authenticate("local", {
-    successRedirect: "/",
-    failureRedirect: "/login",
-    failureFlash: true,
-  })
-);
+router.post("/login", (req, res) => {
+  res.sendFile("ASdasdasd");
+});
 
 router.post("/register", async (req, res, next) => {
-  try {
-    const { password, email } = req.body;
-    await User.create({ password, email });
-    res.redirect("/login");
-  } catch (error) {
-    console.log(error);
-    res.redirect("/register");
-  }
+  res.sendFile("ASdasdasd");
+  // try {
+  //   const { password, email } = req.body;
+  //   await User.create({ password, email });
+  //   res.redirect("/login");
+  // } catch (error) {
+  //   console.log(error);
+  //   res.redirect("/register");
+  // }
 });
 
 router.get("/logout", isAuthenticated, (req, res, next) => {
