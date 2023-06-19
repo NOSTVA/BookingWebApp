@@ -37,6 +37,10 @@ require("./passport-config");
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.get("/", (req, res) => {
+  res.send("ASdasdasd");
+});
+
 app.use(authRouter);
 app.use("/api/v1/appointments", appointmentsRouter);
 app.use("/api/v1/applicants", applicantsRouter);
