@@ -44,12 +44,7 @@ app.use(express.static(path.join(__dirname, "../public")));
 
 app.use((err, req, res, next) => {
   console.error(err.message);
-  res.status(500).json({
-    error: {
-      status: "Internal server error",
-      msg: err.message,
-    },
-  });
+  res.send(err);
 });
 
 module.exports = app;
