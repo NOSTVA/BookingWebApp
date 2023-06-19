@@ -14,7 +14,10 @@ const applicantsRouter = require("../routes/applicantsRouter");
 const authRouter = require("../routes/authRouter");
 
 const app = express();
-const SessionStore = MongoStore.create({ mongoUrl: process.env.MONGO_URI });
+const mongo_uri =
+  process.env.MONGODB_URI ||
+  "mongodb+srv://vercel-admin-user:E9596XTjPTrwIXLN@cluster0.rjrxhmc.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+const SessionStore = MongoStore.create({ mongoUrl: mongo_uri });
 
 app.use(cors());
 
