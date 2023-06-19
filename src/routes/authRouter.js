@@ -2,6 +2,7 @@ const passport = require("passport");
 const express = require("express");
 const router = express.Router();
 const User = require("../model/user");
+const path = require("path");
 
 const { isAuthenticated, isNotAuthenticated } = require("../controllers/auth");
 
