@@ -13,3 +13,5 @@ connectDB(process.env.MONGO_URI)
     });
   })
   .catch(console.log);
+
+export default app;
