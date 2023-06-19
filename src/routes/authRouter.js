@@ -16,11 +16,11 @@ router.get("/login", function (req, res) {
 
 // authentication api
 router.post("/login", (req, res) => {
-  res.sendFile("ASdasdasd");
+  res.json({ message: "login" });
 });
 
 router.post("/register", async (req, res, next) => {
-  res.sendFile("ASdasdasd");
+  res.json({ message: "register" });
   // try {
   //   const { password, email } = req.body;
   //   await User.create({ password, email });
