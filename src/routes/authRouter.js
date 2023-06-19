@@ -12,7 +12,6 @@ router.post(
   isNotAuthenticated,
   passport.authenticate("local", {
     successRedirect: "/",
-    failureRedirect: "/login",
     failureFlash: true,
   })
 );
@@ -23,8 +22,7 @@ router.post("/register", isNotAuthenticated, async (req, res, next) => {
     await User.create({ password, email });
     res.redirect("/login");
   } catch (error) {
-    console.log(error);
-    res.redirect("/register");
+    next(error);
   }
 });
 

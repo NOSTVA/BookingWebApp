@@ -71,8 +71,12 @@ async function createAppointment(req, res, next) {
   try {
     const { expectedTravelDate, email, phone, note, applicants } = req.body;
 
-    if (!expectedTravelDate || !applicants || applicants.length > 5) {
-      return res.status(400).json({ message: "Invalid data" });
+    if (applicants.length < 1) {
+      throw new Error("must provide at least one applicant");
+    }
+
+    if (applicants.length > 5) {
+      throw new Error("must provide at most five applicants");
     }
 
     const appointment = await Appointment.create({
@@ -93,10 +97,6 @@ async function createAppointment(req, res, next) {
 
     res.status(201).json({ appointment, applicants: applicantDocs });
   } catch (err) {
-    await Appointment.findByIdAndDelete(appointment_id);
-    if (err.name === "ValidationError") {
-      return res.status(400).json({ message: err.message });
-    }
     next(err);
   }
 }

@@ -1,31 +1,28 @@
 const mongoose = require("mongoose");
 const Attributes = require("./attributes");
+const uniqueValidator = require("mongoose-unique-validator");
 
 const appointmentSchema = new mongoose.Schema(
   {
     expectedTravelDate: {
       type: Date,
-      required: [true, " expected travel date is required"],
+      required: [true, "The expected travel date field is required"],
     },
     email: {
       type: String,
-      required: [true, "email is required"],
+      required: [true, "The Email field is required"],
       trim: true,
       lowercase: true,
-      validate: {
-        validator: function (v) {
-          return /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
-            v
-          );
-        },
-        message: (props) => `${props.value} is not a valid email address!`,
-      },
+      match: [
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+        "Ivalid email address",
+      ],
     },
     phone: {
       type: String,
-      required: [true, "phone is required"],
+      required: [true, "The Phone number filed is required"],
       trim: true,
-      match: /^\+20\d{11}$/,
+      match: [/^\+20\d{11}$/, "Invalid Phone Number"],
     },
     note: {
       type: String,
@@ -59,6 +56,10 @@ const appointmentSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+
+appointmentSchema.plugin(uniqueValidator, {
+  message: "{PATH} already exists.",
+});
 
 const Appointment = mongoose.model("Appointment", appointmentSchema);
 

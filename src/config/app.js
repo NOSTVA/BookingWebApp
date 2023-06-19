@@ -14,13 +14,20 @@ const applicantsRouter = require("../routes/applicantsRouter");
 const authRouter = require("../routes/authRouter");
 const clientRouter = require("../routes/clientRouter");
 
+const errorController = require("../controllers/errorController");
+
 const app = express();
 const mongo_uri =
   process.env.MONGODB_URI ||
   "mongodb+srv://vercel-admin-user:E9596XTjPTrwIXLN@cluster0.rjrxhmc.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
 const SessionStore = MongoStore.create({ mongoUrl: mongo_uri });
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:3001",
+    credentials: true,
+  })
+);
 
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -47,9 +54,6 @@ app.use("/api/v1/appointments", appointmentsRouter);
 app.use("/api/v1/applicants", applicantsRouter);
 app.use(express.static(path.join(__dirname, "../public")));
 
-app.use((err, req, res, next) => {
-  console.error(err);
-  res.send(err);
-});
+app.use(errorController);
 
 module.exports = app;

@@ -1,52 +1,50 @@
 const mongoose = require("mongoose");
+const uniqueValidator = require("mongoose-unique-validator");
 
 const applicantSchema = new mongoose.Schema(
   {
     appointment: {
       type: mongoose.Types.ObjectId,
       ref: "Appointment",
-      required: [true, "Appointment is required"],
+      required: [true, "The appointment field is required"],
       index: true,
     },
     firstName: {
       type: String,
-      required: [true, "first name is required"],
-      minlength: [2, "first name must be at least 2 characters"],
-      maxlength: [50, "first name cannot be more than 50 characters"],
+      required: [true, "The first name field is required"],
+      minlength: [2, "First name too short"],
+      maxlength: [50, "First name too long"],
       trim: true,
     },
     lastName: {
       type: String,
-      required: [true, "last name is required"],
-      minlength: [2, "last name must be at least 2 characters"],
-      maxlength: [50, "last name cannot be more than 50 characters"],
+      required: [true, "The last name field is required"],
+      minlength: [2, "Last name too short"],
+      maxlength: [50, "Last name too long"],
       trim: true,
     },
     passportNumber: {
       type: String,
-      required: [true, "passport number is required"],
-      trim: true,
+      required: [true, "The passport field is required"],
       unique: true,
+      uppercase: true,
+      trim: true,
     },
     dateOfBirth: {
       type: Date,
-      required: [true, "date of birth is required"],
+      required: [true, "The date of birth field is required"],
       validate: {
-        validator: function (v) {
-          return v < new Date();
+        validator: function (value) {
+          const now = new Date();
+          return value < now;
         },
-        message: (props) => `${props.value} is not a valid date of birth!`,
+        message: "Invalid date of birth",
       },
     },
     image: {
       type: String,
-      required: [true, "image is required"],
-      validate: {
-        validator: function (v) {
-          return /^https?:\/\/\S+\.\S+$/.test(v);
-        },
-        message: (props) => `${props.value} is not a valid image URL!`,
-      },
+      required: [true, "An image URL is required"],
+      match: [/^https?:\/\/\S+\.\S+$/, "Invalid image URL"],
     },
     isDeleted: {
       type: Boolean,
@@ -57,6 +55,9 @@ const applicantSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+applicantSchema.plugin(uniqueValidator, {
+  message: "{PATH} already exists.",
+});
 
 const Applicant = mongoose.model("Applicant", applicantSchema);
 
