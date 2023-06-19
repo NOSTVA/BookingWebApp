@@ -8,8 +8,8 @@ const {
 } = require("../controllers/controller");
 const { isAuthenticated } = require("../controllers/auth");
 
-router.post("/", isAuthenticated, addApplicant);
-router.delete("/:id", isAuthenticated, deleteApplicantById);
-router.patch("/:id", isAuthenticated, updateApplicantById);
+router.post("/", addApplicant);
+router.delete("/:id", deleteApplicantById);
+router.patch("/:id", updateApplicantById);
 
 module.exports = router;
