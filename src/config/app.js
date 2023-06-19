@@ -38,8 +38,7 @@ require("./passport-config");
 app.use(passport.initialize());
 app.use(passport.session());
 
-// app.use(authRouter);
-// app.use(clientRouter);
+app.use(authRouter);
 app.use("/api/v1/appointments", appointmentsRouter);
 app.use("/api/v1/applicants", applicantsRouter);
 app.use(express.static(path.join(__dirname, "../public")));
