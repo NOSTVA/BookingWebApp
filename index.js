@@ -8,6 +8,4 @@ connectDB(process.env.MONGO_URI)
   })
   .catch(console.log);
 
-module.exports = (req, res) => {
-  app(req, res);
-};
+app.listen(process.env.PORT, () => console.log("running"));

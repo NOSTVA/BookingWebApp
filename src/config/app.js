@@ -17,12 +17,7 @@ const clientRouter = require("../routes/clientRouter");
 const app = express();
 const SessionStore = MongoStore.create({ mongoUrl: process.env.MONGO_URI });
 
-app.use(
-  cors({
-    origin: "http://localhost:3001",
-    credentials: true,
-  })
-);
+app.use(cors());
 
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
