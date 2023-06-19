@@ -37,17 +37,13 @@ require("./passport-config");
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.get("/", (req, res) => {
-  res.send("ASdasdasd");
-});
-
 app.use(authRouter);
 app.use("/api/v1/appointments", appointmentsRouter);
 app.use("/api/v1/applicants", applicantsRouter);
 app.use(express.static(path.join(__dirname, "../public")));
 
 app.use((err, req, res, next) => {
-  console.error(err.message);
+  console.error(err);
   res.send(err);
 });
 

@@ -2,14 +2,15 @@ const passport = require("passport");
 const express = require("express");
 const router = express.Router();
 const User = require("../model/user");
+const path = require("path");
 
 const { isAuthenticated, isNotAuthenticated } = require("../controllers/auth");
 
-router.get("/register", function (req, res) {
+router.get("/register", isNotAuthenticated, function (req, res) {
   res.sendFile(path.join(__dirname, "../public/register.html"));
 });
 
-router.get("/login", function (req, res) {
+router.get("/login", isNotAuthenticated, function (req, res) {
   res.sendFile(path.join(__dirname, "../public/login.html"));
 });
 

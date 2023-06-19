@@ -5,7 +5,10 @@ require("dotenv").config();
 connectDB(process.env.MONGO_URI)
   .then(() => {
     console.log(`MongoDB running on ${process.env.MONGO_URI}`);
+    app.listen(process.env.PORT, () => {
+      console.log(
+        `Server live at http://${process.env.HOST}:${process.env.PORT}`
+      );
+    });
   })
   .catch(console.log);
-
-app.listen(process.env.PORT, () => console.log("running"));
