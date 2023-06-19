@@ -17,7 +17,6 @@ router.get("/login", function (req, res) {
 // authentication api
 router.post(
   "/login",
-  isNotAuthenticated,
   passport.authenticate("local", {
     successRedirect: "/",
     failureRedirect: "/login",
@@ -25,7 +24,7 @@ router.post(
   })
 );
 
-router.post("/register", isNotAuthenticated, async (req, res, next) => {
+router.post("/register", async (req, res, next) => {
   try {
     const { password, email } = req.body;
     await User.create({ password, email });
