@@ -2,33 +2,37 @@ const passport = require("passport");
 const express = require("express");
 const router = express.Router();
 const User = require("../model/user");
-const path = require("path");
 
 const { isAuthenticated, isNotAuthenticated } = require("../controllers/auth");
 
-router.get("/register", function (req, res) {
+router.get("/register", isNotAuthenticated, function (req, res) {
   res.sendFile(path.join(__dirname, "../public/register.html"));
 });
 
-router.get("/login", function (req, res) {
+router.get("/login", isNotAuthenticated, function (req, res) {
   res.sendFile(path.join(__dirname, "../public/login.html"));
 });
 
 // authentication api
-router.post("/login", (req, res) => {
-  res.redirect("/register");
-});
+router.post(
+  "/login",
+  isNotAuthenticated,
+  passport.authenticate("local", {
+    successRedirect: "/",
+    failureRedirect: "/login",
+    failureFlash: true,
+  })
+);
 
-router.post("/register", async (req, res, next) => {
-  res.redirect("/login");
-  // try {
-  //   const { password, email } = req.body;
-  //   await User.create({ password, email });
-  //   res.redirect("/login");
-  // } catch (error) {
-  //   console.log(error);
-  //   res.redirect("/register");
-  // }
+router.post("/register", isNotAuthenticated, async (req, res, next) => {
+  try {
+    const { password, email } = req.body;
+    await User.create({ password, email });
+    res.redirect("/login");
+  } catch (error) {
+    console.log(error);
+    res.redirect("/register");
+  }
 });
 
 router.get("/logout", isAuthenticated, (req, res, next) => {
