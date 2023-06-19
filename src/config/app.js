@@ -12,6 +12,7 @@ const bodyParser = require("body-parser");
 const appointmentsRouter = require("../routes/appointmentsRouter");
 const applicantsRouter = require("../routes/applicantsRouter");
 const authRouter = require("../routes/authRouter");
+const clientRouter = require("../routes/clientRouter");
 
 const app = express();
 const mongo_uri =
@@ -41,6 +42,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use(authRouter);
+app.use(clientRouter);
 app.use("/api/v1/appointments", appointmentsRouter);
 app.use("/api/v1/applicants", applicantsRouter);
 app.use(express.static(path.join(__dirname, "../public")));
