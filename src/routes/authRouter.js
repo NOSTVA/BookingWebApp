@@ -5,11 +5,11 @@ const User = require("../model/user");
 
 const { isAuthenticated, isNotAuthenticated } = require("../controllers/auth");
 
-router.get("/register", isNotAuthenticated, function (req, res) {
+router.get("/register", function (req, res) {
   res.sendFile(path.join(__dirname, "../public/register.html"));
 });
 
-router.get("/login", isNotAuthenticated, function (req, res) {
+router.get("/login", function (req, res) {
   res.sendFile(path.join(__dirname, "../public/login.html"));
 });
 
