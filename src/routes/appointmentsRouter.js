@@ -9,7 +9,7 @@ const {
   updateAppointmentById,
 } = require("../controllers/controller");
 
-const { requireAdmin, isAuthenticated } = require("../controllers/auth");
+const { requireAdmin } = require("../controllers/auth");
 
 router.get("/", requireAdmin, getAppointments);
 router.get("/:id", getAppointmentById);

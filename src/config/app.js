@@ -12,7 +12,6 @@ const bodyParser = require("body-parser");
 const appointmentsRouter = require("../routes/appointmentsRouter");
 const applicantsRouter = require("../routes/applicantsRouter");
 const authRouter = require("../routes/authRouter");
-const clientRouter = require("../routes/clientRouter");
 
 const app = express();
 const SessionStore = MongoStore.create({ mongoUrl: process.env.MONGO_URI });
