@@ -68,7 +68,6 @@ async function getAppointmentById(req, res, next) {
 }
 
 async function createAppointment(req, res, next) {
-  let appointment_id;
   try {
     const { expectedTravelDate, email, phone, note, applicants } = req.body;
 
@@ -85,23 +84,47 @@ async function createAppointment(req, res, next) {
       throw customError;
     }
 
-    const appointment = await Appointment.create({
-      expectedTravelDate,
-      email,
-      phone,
-      note,
-    });
+    const session = await mongoose.startSession();
 
-    appointment_id = appointment._id;
+    try {
+      session.startTransaction();
 
-    const applicantDocs = await Applicant.insertMany(
-      applicants.map((applicant) => ({
-        ...applicant,
-        appointment: appointment_id,
-      }))
-    );
+      const createdAppointment = await Appointment.create(
+        [
+          {
+            expectedTravelDate,
+            email,
+            phone,
+            note,
+          },
+        ],
+        { session }
+      );
 
-    res.status(201).json({ appointment, applicants: applicantDocs });
+      const applicantDocs = await Promise.all(
+        applicants.map(async (applicant) => {
+          return await Applicant.create(
+            [
+              {
+                ...applicant,
+                appointment: createdAppointment[0]._id,
+              },
+            ],
+            { session }
+          );
+        })
+      );
+
+      await session.commitTransaction();
+      return res
+        .status(201)
+        .json({ appointment: createdAppointment, applicants: applicantDocs });
+    } catch (error) {
+      await session.abortTransaction();
+      throw error;
+    } finally {
+      session.endSession();
+    }
   } catch (err) {
     next(err);
   }
