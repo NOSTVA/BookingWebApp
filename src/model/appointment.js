@@ -10,7 +10,7 @@ const appointmentSchema = new mongoose.Schema(
     },
     email: {
       type: String,
-      required: [true, "The Email field is required"],
+      required: [true, "The email field is required"],
       trim: true,
       lowercase: true,
       match: [
@@ -20,9 +20,9 @@ const appointmentSchema = new mongoose.Schema(
     },
     phone: {
       type: String,
-      required: [true, "The Phone number filed is required"],
+      required: [true, "The phone number field is required"],
       trim: true,
-      match: [/^\+20\d{11}$/, "Invalid Phone Number"],
+      match: [/^\+20\d{11}$/, "Invalid phone number"],
     },
     note: {
       type: String,

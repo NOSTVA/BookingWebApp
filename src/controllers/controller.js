@@ -1,5 +1,6 @@
 const Applicant = require("../model/applicant");
 const Appointment = require("../model/appointment");
+const mongoose = require("mongoose");
 
 // appointment controllers
 async function getAppointments(req, res, next) {
@@ -71,12 +72,17 @@ async function createAppointment(req, res, next) {
   try {
     const { expectedTravelDate, email, phone, note, applicants } = req.body;
 
-    if (applicants.length < 1) {
-      throw new Error("must provide at least one applicant");
-    }
-
-    if (applicants.length > 5) {
-      throw new Error("must provide at most five applicants");
+    if (applicants.length < 1 || applicants.length > 5) {
+      const customError = new Error();
+      customError.name = "ValidationError";
+      customError.errors = {
+        applicants: {
+          path: "applicants",
+          value: applicants,
+          message: "Must provide between 1 and 5 applicants",
+        },
+      };
+      throw customError;
     }
 
     const appointment = await Appointment.create({
