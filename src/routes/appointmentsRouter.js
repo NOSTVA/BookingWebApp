@@ -14,7 +14,7 @@ const { isAuthenticated, requireAdmin } = require("../controllers/auth");
 router.get("/:id", isAuthenticated, getAppointmentById);
 router.post("/", isAuthenticated, createAppointment);
 
-router.get("/", isAuthenticated, requireAdmin, getAppointments);
+router.get("/", isAuthenticated, getAppointments);
 router.delete("/:id", isAuthenticated, requireAdmin, deleteAppointmentById);
 router.patch("/:id", isAuthenticated, requireAdmin, updateAppointmentById);
 
