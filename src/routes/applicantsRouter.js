@@ -7,7 +7,7 @@ const {
   updateApplicantById,
 } = require("../controllers/controller");
 
-const { isAuthenticated, isNotAuthenticated } = require("../controllers/auth");
+const { isAuthenticated } = require("../controllers/auth");
 
 router.post("/", isAuthenticated, addApplicant);
 router.delete("/:id", isAuthenticated, deleteApplicantById);

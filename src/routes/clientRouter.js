@@ -19,7 +19,7 @@ router.get("/login", isNotAuthenticated, function (req, res) {
 router.get("/", isAuthenticated, (req, res, next) => {
   res.sendFile(path.join(__dirname, "../public/index.html"));
 });
-router.get("/dashboard", isAuthenticated, requireAdmin, (req, res, next) => {
+router.get("/admin", isAuthenticated, requireAdmin, (req, res, next) => {
   res.sendFile(path.join(__dirname, "../public/index.html"));
 });
 

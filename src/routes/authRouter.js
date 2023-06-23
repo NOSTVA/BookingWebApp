@@ -35,8 +35,4 @@ router.get("/logout", isAuthenticated, (req, res, next) => {
   });
 });
 
-router.get("/u", isAuthenticated, function (req, res) {
-  res.status(200).json(req.user);
-});
-
 module.exports = router;

@@ -2,6 +2,8 @@ module.exports = (err, req, res, next) => {
   try {
     if (err.name === "ValidationError")
       return (err = handleValidationError(err, res));
+
+    console.log(err.message);
   } catch (err) {
     console.error(err);
   }

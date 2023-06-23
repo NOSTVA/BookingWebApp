@@ -13,6 +13,7 @@ const appointmentsRouter = require("../routes/appointmentsRouter");
 const applicantsRouter = require("../routes/applicantsRouter");
 const authRouter = require("../routes/authRouter");
 const clientRouter = require("../routes/clientRouter");
+const userRouter = require("../routes/userRouter");
 
 const errorController = require("../controllers/errorController");
 
@@ -50,6 +51,7 @@ app.use(passport.session());
 
 app.use(authRouter);
 app.use(clientRouter);
+app.use("/api/v1/u", userRouter);
 app.use("/api/v1/appointments", appointmentsRouter);
 app.use("/api/v1/applicants", applicantsRouter);
 app.use(express.static(path.join(__dirname, "../public")));

@@ -1,3 +1,5 @@
+const UserAppointment = require("../model/userAppointment");
+
 function isAuthenticated(req, res, next) {
   if (!req.isAuthenticated()) {
     return res.status(302).redirect("/login");
@@ -25,4 +27,8 @@ function requireAdmin(req, res, next) {
   }
 }
 
-module.exports = { isAuthenticated, isNotAuthenticated, requireAdmin };
+module.exports = {
+  isAuthenticated,
+  isNotAuthenticated,
+  requireAdmin,
+};

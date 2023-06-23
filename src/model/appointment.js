@@ -4,6 +4,12 @@ const uniqueValidator = require("mongoose-unique-validator");
 
 const appointmentSchema = new mongoose.Schema(
   {
+    createdBy: {
+      type: mongoose.Types.ObjectId,
+      ref: "User",
+      index: true,
+      default: null,
+    },
     expectedTravelDate: {
       type: Date,
       required: [true, "The expected travel date field is required"],
@@ -62,5 +68,4 @@ appointmentSchema.plugin(uniqueValidator, {
 });
 
 const Appointment = mongoose.model("Appointment", appointmentSchema);
-
 module.exports = Appointment;

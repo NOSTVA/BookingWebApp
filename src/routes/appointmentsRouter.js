@@ -11,10 +11,11 @@ const {
 
 const { isAuthenticated, requireAdmin } = require("../controllers/auth");
 
-router.get("/", isAuthenticated, requireAdmin, getAppointments);
 router.get("/:id", isAuthenticated, getAppointmentById);
 router.post("/", isAuthenticated, createAppointment);
-router.delete("/:id", isAuthenticated, deleteAppointmentById);
-router.patch("/:id", isAuthenticated, updateAppointmentById);
+
+router.get("/", isAuthenticated, requireAdmin, getAppointments);
+router.delete("/:id", isAuthenticated, requireAdmin, deleteAppointmentById);
+router.patch("/:id", isAuthenticated, requireAdmin, updateAppointmentById);
 
 module.exports = router;

@@ -92,6 +92,7 @@ async function createAppointment(req, res, next) {
       const createdAppointment = await Appointment.create(
         [
           {
+            createdBy: req.user._id,
             expectedTravelDate,
             email,
             phone,
