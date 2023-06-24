@@ -64,7 +64,7 @@ const appointmentSchema = new mongoose.Schema(
           ref: "User",
         },
       ],
-      default: [],
+      default: () => new Array(),
     },
   },
   {

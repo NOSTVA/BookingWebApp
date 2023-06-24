@@ -56,7 +56,8 @@ router.delete(
 
       const appointment = await Appointment.findById(appointmentId);
       const updatedAssignedUsers = appointment.assignedUsers.filter(
-        (assignedUserId) => JSON.stringify(assignedUserId) !== userId
+        (assignedUserId) =>
+          JSON.stringify(assignedUserId) !== JSON.stringify(userId)
       );
 
       if (updatedAssignedUsers.length === appointment.assignedUsers.length) {
