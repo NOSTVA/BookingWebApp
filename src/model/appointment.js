@@ -4,12 +4,6 @@ const uniqueValidator = require("mongoose-unique-validator");
 
 const appointmentSchema = new mongoose.Schema(
   {
-    createdBy: {
-      type: mongoose.Types.ObjectId,
-      ref: "User",
-      index: true,
-      default: null,
-    },
     expectedTravelDate: {
       type: Date,
       required: [true, "The expected travel date field is required"],
@@ -56,6 +50,21 @@ const appointmentSchema = new mongoose.Schema(
     isDeleted: {
       type: Boolean,
       default: false,
+    },
+    createdBy: {
+      type: mongoose.Types.ObjectId,
+      ref: "User",
+      index: true,
+      default: null,
+    },
+    assignedUsers: {
+      type: [
+        {
+          type: mongoose.Types.ObjectId,
+          ref: "User",
+        },
+      ],
+      default: [],
     },
   },
   {
