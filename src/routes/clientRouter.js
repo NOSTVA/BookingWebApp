@@ -9,16 +9,24 @@ const {
 } = require("../controllers/auth");
 
 router.get("/register", isNotAuthenticated, function (req, res) {
-  res.sendFile(path.join(__dirname, "../public/register.html"));
+  res.sendFile(path.join(__dirname, "../public/index.html"));
 });
 
 router.get("/login", isNotAuthenticated, function (req, res) {
-  res.sendFile(path.join(__dirname, "../public/login.html"));
+  res.sendFile(path.join(__dirname, "../public/index.html"));
 });
 
 router.get("/", isAuthenticated, (req, res, next) => {
   res.sendFile(path.join(__dirname, "../public/index.html"));
 });
+router.get("/create", isAuthenticated, (req, res, next) => {
+  res.sendFile(path.join(__dirname, "../public/index.html"));
+});
+
+router.get("/myappointments", isAuthenticated, (req, res, next) => {
+  res.sendFile(path.join(__dirname, "../public/index.html"));
+});
+
 router.get("/admin", isAuthenticated, requireAdmin, (req, res, next) => {
   res.sendFile(path.join(__dirname, "../public/index.html"));
 });

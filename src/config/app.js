@@ -49,8 +49,8 @@ require("./passport-config");
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(authRouter);
 app.use(clientRouter);
+app.use("/api/v1/", authRouter);
 app.use("/api/v1/u", userRouter);
 app.use("/api/v1/appointments", appointmentsRouter);
 app.use("/api/v1/applicants", applicantsRouter);
