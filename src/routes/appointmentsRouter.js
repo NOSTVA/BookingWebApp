@@ -15,7 +15,7 @@ router.get("/:id", isAuthenticated, getAppointmentById);
 router.post("/", isAuthenticated, createAppointment);
 
 router.get("/", isAuthenticated, getAppointments);
-router.delete("/:id", isAuthenticated, requireAdmin, deleteAppointmentById);
-router.patch("/:id", isAuthenticated, requireAdmin, updateAppointmentById);
+router.delete("/:id", isAuthenticated, deleteAppointmentById);
+router.patch("/:id", isAuthenticated, updateAppointmentById);
 
 module.exports = router;
