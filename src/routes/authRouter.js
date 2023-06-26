@@ -21,7 +21,9 @@ router.post("/login", isNotAuthenticated, (req, res, next) => {
       if (error) {
         return next(error);
       }
-      return res.status(200).json({ message: "Login successful" });
+
+      if (user.role === "admin") return res.redirect("/admin");
+      if (user.role === "user") return res.redirect("/myappointments");
     });
   })(req, res, next);
 });
@@ -35,9 +37,8 @@ router.post("/register", isNotAuthenticated, async (req, res, next) => {
         if (error) {
           return next(error);
         }
-        return res
-          .status(200)
-          .json({ message: "Register and login successful" });
+        if (user.role === "admin") return res.redirect("/admin");
+        if (user.role === "user") return res.redirect("/myappointments");
       });
     }
   } catch (error) {
