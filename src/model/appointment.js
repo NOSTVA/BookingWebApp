@@ -22,7 +22,7 @@ const appointmentSchema = new mongoose.Schema(
       type: String,
       required: [true, "The phone number field is required"],
       trim: true,
-      match: [/^\+20\d{11}$/, "Invalid phone number"],
+      match: [/^(\+|\d)[0-9]{1,14}$/, "Invalid phone number"],
     },
     note: {
       type: String,

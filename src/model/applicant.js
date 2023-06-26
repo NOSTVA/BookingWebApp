@@ -12,7 +12,7 @@ const applicantSchema = new mongoose.Schema(
     firstName: {
       type: String,
       required: [true, "The first name field is required"],
-      minlength: [2, "First name too short"],
+      minlength: [1, "First name too short"],
       maxlength: [50, "First name too long"],
       trim: true,
     },
