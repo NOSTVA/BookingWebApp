@@ -8,7 +8,7 @@ const {
   isAuthenticated,
 } = require("../controllers/auth");
 
-router.get("/register", isNotAuthenticated, function (req, res) {
+router.get("/app/booking/team/signup", isNotAuthenticated, function (req, res) {
   res.sendFile(path.join(__dirname, "../public/index.html"));
 });
 

@@ -50,7 +50,7 @@ router.get("/logout", isAuthenticated, (req, res, next) => {
     if (error) {
       return next(error);
     }
-    res.redirect("/");
+    res.redirect("/login");
   });
 });
 
