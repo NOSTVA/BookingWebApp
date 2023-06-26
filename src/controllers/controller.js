@@ -89,6 +89,7 @@ async function createAppointment(req, res, next) {
     try {
       session.startTransaction();
 
+      //create appointment
       const createdAppointment = await Appointment.create(
         [
           {
@@ -97,11 +98,13 @@ async function createAppointment(req, res, next) {
             email,
             phone,
             note,
+            assignedUsers: [req.user._id],
           },
         ],
         { session }
       );
 
+      // create applicants
       const applicantDocs = await Promise.all(
         applicants.map(async (applicant) => {
           return await Applicant.create(
