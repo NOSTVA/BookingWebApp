@@ -29,6 +29,7 @@ const applicantSchema = new mongoose.Schema(
       unique: true,
       uppercase: true,
       trim: true,
+      maxlength: [10, "maximum passport number length is 10 characters"],
     },
     dateOfBirth: {
       type: Date,
