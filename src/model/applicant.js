@@ -43,8 +43,8 @@ const applicantSchema = new mongoose.Schema(
     },
     image: {
       type: String,
-      required: [true, "An image URL is required"],
       match: [/^https?:\/\/\S+\.\S+$/, "Invalid image URL"],
+      default: "https://example.com",
     },
     isDeleted: {
       type: Boolean,
