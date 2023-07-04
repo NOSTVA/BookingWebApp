@@ -23,7 +23,7 @@ router.get("/create", isAuthenticated, (req, res, next) => {
   res.sendFile(path.join(__dirname, "../public/index.html"));
 });
 
-router.get("/myappointments", isAuthenticated, (req, res, next) => {
+router.get("/home", isAuthenticated, requireAdmin, (req, res, next) => {
   res.sendFile(path.join(__dirname, "../public/index.html"));
 });
 
