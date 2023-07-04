@@ -69,8 +69,16 @@ async function getAppointmentById(req, res, next) {
 
 async function createAppointment(req, res, next) {
   try {
-    const { expectedTravelDate, email, phone, note, applicants, visa, owner } =
-      req.body;
+    const {
+      expectedTravelDate,
+      email,
+      phone,
+      note,
+      applicants,
+      visa,
+      owner,
+      status,
+    } = req.body;
 
     if (applicants.length < 1 || applicants.length > 5) {
       const customError = new Error();
@@ -102,6 +110,7 @@ async function createAppointment(req, res, next) {
             visa,
             owner,
             assignedUsers: [req.user._id],
+            status,
           },
         ],
         { session }
