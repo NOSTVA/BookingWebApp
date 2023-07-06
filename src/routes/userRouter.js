@@ -110,6 +110,7 @@ router.get("/appointments", isAuthenticated, async (req, res, next) => {
           appointment: appointment._id,
           isDeleted: { $ne: true },
         })
+          .sort("-createdAt")
           .select("-__v -updatedAt -createdAt -isDeleted -appointment")
           .lean();
 
@@ -135,6 +136,7 @@ router.get("/appointments", isAuthenticated, async (req, res, next) => {
           appointment: appointment._id,
           isDeleted: { $ne: true },
         })
+          .sort("createdAt")
           .select("-__v -updatedAt -createdAt -isDeleted -appointment")
           .lean();
         return {

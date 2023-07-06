@@ -31,6 +31,7 @@ async function getAppointments(req, res, next) {
           appointment: appointment._id,
           isDeleted: { $ne: true },
         })
+          .sort("createdAt")
           .select("-__v -updatedAt -createdAt -isDeleted -appointment")
           .lean();
         return {
@@ -118,17 +119,22 @@ async function createAppointment(req, res, next) {
 
       // create applicants
       const applicantDocs = await Promise.all(
-        applicants.map(async (applicant) => {
-          return await Applicant.create(
-            [
-              {
-                ...applicant,
-                appointment: createdAppointment[0]._id,
-              },
-            ],
-            { session }
-          );
-        })
+        applicants
+          .map(async (applicant) => {
+            return await Applicant.create(
+              [
+                {
+                  ...applicant,
+                  appointment: createdAppointment[0]._id,
+                },
+              ],
+              { session }
+            );
+          })
+          .sort((a, b) => {
+            console.log(a, b);
+            return a.createdAt - b.createdAt;
+          })
       );
 
       await session.commitTransaction();
