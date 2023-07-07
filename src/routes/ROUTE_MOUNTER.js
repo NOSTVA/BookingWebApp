@@ -14,19 +14,14 @@ app.use("/api/v2/users", isAuthenticated, requireAdmin, userRouter);
 app.use("/api/v2/appointments", isAuthenticated, appointmentsRouter);
 app.use("/api/v2/applicants", isAuthenticated, applicantsRouter);
 
+app.use((req, res, next) => {
+  if (/(.ico|.js|.css|.jpg|.png|.map)$/i.test(req.path)) {
+    next();
+  } else {
+    res.header("Cache-Control", "private, no-cache, no-store, must-revalidate");
+    res.header("Expires", "-1");
+    res.header("Pragma", "no-cache");
+    res.sendFile(path.join(__dirname, "../public/index.html"));
+  }
+});
 app.use(express.static(path.join(__dirname, "../public")));
-app.get("/login", (req, res) => {
-  res.sendFile(path.join(__dirname, "../public/index.html"));
-});
-app.get("/create", (req, res) => {
-  res.sendFile(path.join(__dirname, "../public/index.html"));
-});
-app.get("/dashboard", (req, res) => {
-  res.sendFile(path.join(__dirname, "../public/index.html"));
-});
-app.get("/admin", (req, res) => {
-  res.sendFile(path.join(__dirname, "../public/index.html"));
-});
-app.get("/team/auth/register", (req, res) => {
-  res.sendFile(path.join(__dirname, "../public/index.html"));
-});
