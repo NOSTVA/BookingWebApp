@@ -1,28 +1,24 @@
 const mongoose = require("mongoose");
-const Attributes = require("./attributes");
-const uniqueValidator = require("mongoose-unique-validator");
+const attributes = require("./attributes");
 
-const appointmentSchema = new mongoose.Schema(
+const appointment = new mongoose.Schema(
   {
     expectedTravelDate: {
       type: Date,
-      required: [true, "The expected travel date field is required"],
+      required: true,
     },
     email: {
       type: String,
-      required: [true, "The email field is required"],
+      required: true,
       trim: true,
       lowercase: true,
-      match: [
-        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-        "Ivalid email address",
-      ],
+      match: attributes.emailRegex,
     },
     phone: {
       type: String,
-      required: [true, "The phone number field is required"],
+      required: true,
       trim: true,
-      match: [/^(\+|\d)[0-9]{1,14}$/, "Invalid phone number"],
+      match: attributes.phoneRegex,
     },
     note: {
       type: String,
@@ -32,19 +28,19 @@ const appointmentSchema = new mongoose.Schema(
     status: {
       type: String,
       default: "pending",
-      enum: Attributes.statusEnums,
+      enum: attributes.statusEnums,
       index: true,
     },
     owner: {
       type: String,
       default: "none",
-      enum: Attributes.ownerEnums,
+      enum: attributes.ownerEnums,
       index: true,
     },
     visa: {
       type: String,
       default: "none",
-      enum: Attributes.visaEnums,
+      enum: attributes.visaEnums,
       index: true,
     },
     isDeleted: {
@@ -67,14 +63,8 @@ const appointmentSchema = new mongoose.Schema(
       default: () => new Array(),
     },
   },
-  {
-    timestamps: true,
-  }
+  { timestamps: true, autoCreate: true }
 );
 
-appointmentSchema.plugin(uniqueValidator, {
-  message: "{PATH} already exists.",
-});
-
-const Appointment = mongoose.model("Appointment", appointmentSchema);
+const Appointment = mongoose.model("Appointment", appointment);
 module.exports = Appointment;

@@ -1,16 +1,9 @@
 const express = require("express");
 const router = express.Router();
 
-const {
-  addApplicant,
-  deleteApplicantById,
-  updateApplicantById,
-} = require("../controllers/controller");
+const applicantController = require("../controllers/applicant");
 
-const { isAuthenticated } = require("../controllers/auth");
-
-router.post("/", isAuthenticated, addApplicant);
-router.delete("/:id", isAuthenticated, deleteApplicantById);
-router.patch("/:id", isAuthenticated, updateApplicantById);
+router.delete("/:id", applicantController.delete_applicant);
+router.patch("/:id", applicantController.update_applicant);
 
 module.exports = router;

@@ -40,7 +40,7 @@ passport.serializeUser((user, done) => {
 // Deserialize user by user id and return user object
 passport.deserializeUser(async (id, done) => {
   try {
-    const user = await User.findById(id).select("email role createdAt");
+    const user = await User.findById(id).select("_id email role createdAt");
     done(null, user);
   } catch (err) {
     done(err);

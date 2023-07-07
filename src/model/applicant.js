@@ -1,39 +1,39 @@
 const mongoose = require("mongoose");
-const uniqueValidator = require("mongoose-unique-validator");
+const attributes = require("./attributes");
 
-const applicantSchema = new mongoose.Schema(
+const applicant = new mongoose.Schema(
   {
     appointment: {
       type: mongoose.Types.ObjectId,
       ref: "Appointment",
-      required: [true, "The appointment field is required"],
+      required: true,
       index: true,
     },
     firstName: {
       type: String,
-      required: [true, "The first name field is required"],
-      minlength: [1, "First name too short"],
-      maxlength: [50, "First name too long"],
+      required: true,
+      minlength: 1,
+      maxlength: 50,
       trim: true,
     },
     lastName: {
       type: String,
-      required: [true, "The last name field is required"],
-      minlength: [2, "Last name too short"],
-      maxlength: [50, "Last name too long"],
+      required: true,
+      minlength: 2,
+      maxlength: 50,
       trim: true,
     },
     passportNumber: {
       type: String,
-      required: [true, "The passport field is required"],
+      required: true,
       unique: true,
       uppercase: true,
       trim: true,
-      maxlength: [10, "maximum passport number length is 10 characters"],
+      maxlength: 10,
     },
     dateOfBirth: {
       type: Date,
-      required: [true, "The date of birth field is required"],
+      required: true,
       validate: {
         validator: function (value) {
           const now = new Date();
@@ -44,7 +44,7 @@ const applicantSchema = new mongoose.Schema(
     },
     image: {
       type: String,
-      match: [/^https?:\/\/\S+\.\S+$/, "Invalid image URL"],
+      match: attributes.urlRegex,
       default: "https://example.com",
     },
     isDeleted: {
@@ -56,10 +56,6 @@ const applicantSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
-applicantSchema.plugin(uniqueValidator, {
-  message: "{PATH} already exists.",
-});
 
-const Applicant = mongoose.model("Applicant", applicantSchema);
-
+const Applicant = mongoose.model("Applicant", applicant);
 module.exports = Applicant;
