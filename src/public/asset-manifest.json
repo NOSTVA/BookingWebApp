@@ -1,5 +1,6 @@
 {
   "files": {
+<<<<<<< HEAD
     "main.js": "/static/js/main.83687e86.js",
     "static/js/756.4d925885.chunk.js": "/static/js/756.4d925885.chunk.js",
     "static/js/490.2e5c64c4.chunk.js": "/static/js/490.2e5c64c4.chunk.js",
@@ -30,5 +31,13 @@
   },
   "entrypoints": [
     "static/js/main.83687e86.js"
+=======
+    "main.js": "/static/js/main.b3014339.js",
+    "index.html": "/index.html",
+    "main.b3014339.js.map": "/static/js/main.b3014339.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.b3014339.js"
+>>>>>>> bb3ac2ecaebc57d5d605580711ab8fb7031df021
   ]
 }
