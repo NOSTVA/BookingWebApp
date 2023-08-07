@@ -13,7 +13,9 @@ app.use("/api/v2", authRouter);
 app.use("/api/v2/users", isAuthenticated, requireAdmin, userRouter);
 app.use("/api/v2/appointments", isAuthenticated, appointmentsRouter);
 app.use("/api/v2/applicants", isAuthenticated, applicantsRouter);
-
+// This code makes sure that any request that does not matches a static file
+// in the build folder, will just serve index.html. Client side routing is
+// going to make sure that the correct content will be loaded.
 app.use((req, res, next) => {
   if (/(.ico|.js|.css|.jpg|.png|.map)$/i.test(req.path)) {
     next();
