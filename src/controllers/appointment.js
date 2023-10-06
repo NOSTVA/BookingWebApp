@@ -36,6 +36,14 @@ exports.get_appointments = async (req, res, next) => {
           },
         },
         {
+          $lookup: {
+            from: "users",
+            localField: "lastUpdatedBy",
+            foreignField: "_id",
+            as: "lastUpdatedBy",
+          },
+        },
+        {
           $addFields: {
             applicants: {
               $filter: {
@@ -49,14 +57,10 @@ exports.get_appointments = async (req, res, next) => {
         },
         {
           $project: {
-            __v: 0,
-            updatedAt: 0,
-            isDeleted: 0,
             "applicants.__v": 0,
-            "applicants.updatedAt": 0,
-            "applicants.createdAt": 0,
             "applicants.isDeleted": 0,
             "applicants.appointment": 0,
+            "lastUpdatedBy.password": 0,
           },
         },
         { $sort: { createdAt: -1 } },
@@ -296,15 +300,13 @@ exports.update_appointment = async (req, res, next) => {
       updateQuery.visa = visa;
     }
 
+    updateQuery.lastUpdatedBy = req.user._id;
+
     const updatedAppointment = await Appointment.findOneAndUpdate(
       { _id: id, isDeleted: { $ne: true } },
       updateQuery,
       { new: true, runValidators: true }
-    );
-
-    if (!updatedAppointment) {
-      return res.status(404).json({ message: "Appointment not found" });
-    }
+    ).populate("lastUpdatedBy", ["email"]);
 
     res.json(updatedAppointment);
   } catch (err) {

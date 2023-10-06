@@ -53,6 +53,12 @@ const appointment = new mongoose.Schema(
       index: true,
       default: null,
     },
+    lastUpdatedBy: {
+      type: mongoose.Types.ObjectId,
+      ref: "User",
+      index: true,
+      default: null,
+    },
     assignedUsers: {
       type: [
         {
