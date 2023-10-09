@@ -24,64 +24,62 @@ exports.get_appointments = async (req, res, next) => {
     }
 
     let appointments = [];
-    if (role === "admin") {
-      appointments = await Appointment.aggregate([
-        { $match: { ...queryObject, isDeleted: { $ne: true } } },
-        {
-          $lookup: {
-            from: "applicants",
-            localField: "_id",
-            foreignField: "appointment",
-            as: "applicants",
-          },
+    appointments = await Appointment.aggregate([
+      { $match: { ...queryObject, isDeleted: { $ne: true } } },
+      {
+        $lookup: {
+          from: "applicants",
+          localField: "_id",
+          foreignField: "appointment",
+          as: "applicants",
         },
-        {
-          $lookup: {
-            from: "users",
-            localField: "lastUpdatedBy",
-            foreignField: "_id",
-            as: "lastUpdatedBy",
-          },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "lastUpdatedBy",
+          foreignField: "_id",
+          as: "lastUpdatedBy",
         },
-        {
-          $addFields: {
-            applicants: {
-              $filter: {
-                input: "$applicants",
-                as: "applicant",
-                cond: { $ne: ["$$applicant.isDeleted", true] },
-              },
-            },
-            numberOfApplicants: { $size: "$applicants" },
-          },
-        },
-        { $unwind: "$applicants" },
-        { $sort: { "applicants.index": 1 } },
-        {
-          $group: {
-            _id: "$_id",
-            applicants: { $push: "$applicants" },
-            data: { $first: "$$ROOT" },
-          },
-        },
-        {
-          $replaceRoot: {
-            newRoot: {
-              $mergeObjects: ["$data", { applicants: "$applicants" }],
+      },
+      {
+        $addFields: {
+          applicants: {
+            $filter: {
+              input: "$applicants",
+              as: "applicant",
+              cond: { $ne: ["$$applicant.isDeleted", true] },
             },
           },
+          numberOfApplicants: { $size: "$applicants" },
         },
-        {
-          $project: {
-            "applicants.__v": 0,
-            "applicants.isDeleted": 0,
-            "applicants.appointment": 0,
-            "lastUpdatedBy.password": 0,
+      },
+      { $unwind: "$applicants" },
+      { $sort: { "applicants.index": 1 } },
+      {
+        $group: {
+          _id: "$_id",
+          applicants: { $push: "$applicants" },
+          data: { $first: "$$ROOT" },
+        },
+      },
+      {
+        $replaceRoot: {
+          newRoot: {
+            $mergeObjects: ["$data", { applicants: "$applicants" }],
           },
         },
-        { $sort: { createdAt: -1 } },
-      ]);
-    }
+      },
+      {
+        $project: {
+          "applicants.__v": 0,
+          "applicants.isDeleted": 0,
+          "applicants.appointment": 0,
+          "lastUpdatedBy.password": 0,
+        },
+      },
+      { $sort: { createdAt: -1 } },
+    ]);
 
     const assignedAppointments = await Appointment.aggregate([
       {
