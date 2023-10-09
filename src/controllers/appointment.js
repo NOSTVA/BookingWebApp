@@ -23,8 +23,7 @@ exports.get_appointments = async (req, res, next) => {
       queryObject.owner = owner;
     }
 
-    let appointments = [];
-    appointments = await Appointment.aggregate([
+    let appointments = await Appointment.aggregate([
       { $match: { ...queryObject, isDeleted: { $ne: true } } },
       {
         $lookup: {
