@@ -9,6 +9,10 @@ const applicant = new mongoose.Schema(
       required: true,
       index: true,
     },
+    index: {
+      type: Number,
+      default: 0,
+    },
     firstName: {
       type: String,
       required: true,

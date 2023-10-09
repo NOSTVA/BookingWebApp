@@ -55,6 +55,22 @@ exports.get_appointments = async (req, res, next) => {
             numberOfApplicants: { $size: "$applicants" },
           },
         },
+        { $unwind: "$applicants" },
+        { $sort: { "applicants.index": 1 } },
+        {
+          $group: {
+            _id: "$_id",
+            applicants: { $push: "$applicants" },
+            data: { $first: "$$ROOT" },
+          },
+        },
+        {
+          $replaceRoot: {
+            newRoot: {
+              $mergeObjects: ["$data", { applicants: "$applicants" }],
+            },
+          },
+        },
         {
           $project: {
             "applicants.__v": 0,
@@ -95,6 +111,22 @@ exports.get_appointments = async (req, res, next) => {
           numberOfApplicants: { $size: "$applicants" },
         },
       },
+      { $unwind: "$applicants" },
+      { $sort: { "applicants.index": 1 } },
+      {
+        $group: {
+          _id: "$_id",
+          applicants: { $push: "$applicants" },
+          data: { $first: "$$ROOT" },
+        },
+      },
+      {
+        $replaceRoot: {
+          newRoot: {
+            $mergeObjects: ["$data", { applicants: "$applicants" }],
+          },
+        },
+      },
       {
         $project: {
           __v: 0,
@@ -132,6 +164,22 @@ exports.get_appointments = async (req, res, next) => {
             },
           },
           numberOfApplicants: { $size: "$applicants" },
+        },
+      },
+      { $unwind: "$applicants" },
+      { $sort: { "applicants.index": 1 } },
+      {
+        $group: {
+          _id: "$_id",
+          applicants: { $push: "$applicants" },
+          data: { $first: "$$ROOT" },
+        },
+      },
+      {
+        $replaceRoot: {
+          newRoot: {
+            $mergeObjects: ["$data", { applicants: "$applicants" }],
+          },
         },
       },
       {
@@ -225,12 +273,13 @@ exports.create_appointment = async (req, res, next) => {
       );
       // create applicants
       const applicantDocs = await Promise.all(
-        applicants.map(async (applicant) => {
+        applicants.map(async (applicant, index) => {
           return await Applicant.create(
             [
               {
                 ...applicant,
                 appointment: createdAppointment[0]._id,
+                index,
               },
             ],
             { session }
