@@ -200,7 +200,7 @@ exports.get_extension_appointments = async (req, res, next) => {
         { $sort: { createdAt: -1 } },
       ]);
 
-      appointments = [...assigned, ...created];
+      appointments = [...assigned];
     }
 
     res.json({
