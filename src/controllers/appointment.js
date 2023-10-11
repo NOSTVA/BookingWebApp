@@ -2,6 +2,218 @@ const Appointment = require("../model/appointment");
 const Applicant = require("../model/applicant");
 const mongoose = require("mongoose");
 
+exports.get_extension_appointments = async (req, res, next) => {
+  try {
+    const { _id: userId, role } = req.user;
+    const { visa, status, owner } = req.query;
+
+    const { enum: ownerEmuns } = Appointment.schema.path("owner").options;
+    const { enum: visaEmuns } = Appointment.schema.path("visa").options;
+    const { enum: statusEmuns } = Appointment.schema.path("status").options;
+
+    const queryObject = {};
+
+    if (visa) {
+      queryObject.visa = visa;
+    }
+    if (status) {
+      queryObject.status = status;
+    }
+    if (owner) {
+      queryObject.owner = owner;
+    }
+
+    let appointments = [];
+    if (role === "admin") {
+      appointments = await Appointment.aggregate([
+        { $match: { ...queryObject, isDeleted: { $ne: true } } },
+        {
+          $lookup: {
+            from: "applicants",
+            localField: "_id",
+            foreignField: "appointment",
+            as: "applicants",
+          },
+        },
+        {
+          $lookup: {
+            from: "users",
+            localField: "lastUpdatedBy",
+            foreignField: "_id",
+            as: "lastUpdatedBy",
+          },
+        },
+        {
+          $addFields: {
+            applicants: {
+              $filter: {
+                input: "$applicants",
+                as: "applicant",
+                cond: { $ne: ["$$applicant.isDeleted", true] },
+              },
+            },
+            numberOfApplicants: { $size: "$applicants" },
+          },
+        },
+        { $unwind: "$applicants" },
+        { $sort: { "applicants.index": 1 } },
+        {
+          $group: {
+            _id: "$_id",
+            applicants: { $push: "$applicants" },
+            data: { $first: "$$ROOT" },
+          },
+        },
+        {
+          $replaceRoot: {
+            newRoot: {
+              $mergeObjects: ["$data", { applicants: "$applicants" }],
+            },
+          },
+        },
+        {
+          $project: {
+            "applicants.__v": 0,
+            "applicants.isDeleted": 0,
+            "applicants.appointment": 0,
+            "lastUpdatedBy.password": 0,
+          },
+        },
+        { $sort: { createdAt: -1 } },
+      ]);
+    } else {
+      const assigned = await Appointment.aggregate([
+        {
+          $match: {
+            ...queryObject,
+            isDeleted: { $ne: true },
+            assignedUsers: userId,
+          },
+        },
+        {
+          $lookup: {
+            from: "applicants",
+            localField: "_id",
+            foreignField: "appointment",
+            as: "applicants",
+          },
+        },
+        {
+          $addFields: {
+            applicants: {
+              $filter: {
+                input: "$applicants",
+                as: "applicant",
+                cond: { $ne: ["$$applicant.isDeleted", true] },
+              },
+            },
+            numberOfApplicants: { $size: "$applicants" },
+          },
+        },
+        { $unwind: "$applicants" },
+        { $sort: { "applicants.index": 1 } },
+        {
+          $group: {
+            _id: "$_id",
+            applicants: { $push: "$applicants" },
+            data: { $first: "$$ROOT" },
+          },
+        },
+        {
+          $replaceRoot: {
+            newRoot: {
+              $mergeObjects: ["$data", { applicants: "$applicants" }],
+            },
+          },
+        },
+        {
+          $project: {
+            __v: 0,
+            updatedAt: 0,
+            isDeleted: 0,
+            "applicants.__v": 0,
+            "applicants.updatedAt": 0,
+            "applicants.createdAt": 0,
+            "applicants.isDeleted": 0,
+            "applicants.appointment": 0,
+          },
+        },
+        { $sort: { createdAt: -1 } },
+      ]);
+
+      const created = await Appointment.aggregate([
+        {
+          $match: {
+            ...queryObject,
+            createdBy: userId,
+            isDeleted: { $ne: true },
+          },
+        },
+        {
+          $lookup: {
+            from: "applicants",
+            localField: "_id",
+            foreignField: "appointment",
+            as: "applicants",
+          },
+        },
+        {
+          $addFields: {
+            applicants: {
+              $filter: {
+                input: "$applicants",
+                as: "applicant",
+                cond: { $ne: ["$$applicant.isDeleted", true] },
+              },
+            },
+            numberOfApplicants: { $size: "$applicants" },
+          },
+        },
+        { $unwind: "$applicants" },
+        { $sort: { "applicants.index": 1 } },
+        {
+          $group: {
+            _id: "$_id",
+            applicants: { $push: "$applicants" },
+            data: { $first: "$$ROOT" },
+          },
+        },
+        {
+          $replaceRoot: {
+            newRoot: {
+              $mergeObjects: ["$data", { applicants: "$applicants" }],
+            },
+          },
+        },
+        {
+          $project: {
+            __v: 0,
+            updatedAt: 0,
+            isDeleted: 0,
+            "applicants.__v": 0,
+            "applicants.updatedAt": 0,
+            "applicants.createdAt": 0,
+            "applicants.isDeleted": 0,
+            "applicants.appointment": 0,
+          },
+        },
+        { $sort: { createdAt: -1 } },
+      ]);
+
+      appointments = [...assigned, ...created];
+    }
+
+    res.json({
+      success: true,
+      payload: {
+        appointments,
+      },
+      attributes: { ownerEmuns, visaEmuns, statusEmuns },
+    });
+  } catch (err) {
+    next(err);
+  }
+};
 exports.get_appointments = async (req, res, next) => {
   try {
     const { _id: userId, role } = req.user;
