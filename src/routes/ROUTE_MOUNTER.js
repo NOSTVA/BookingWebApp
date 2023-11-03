@@ -10,7 +10,6 @@ const userRouter = require("../routes/userRouter");
 const appointmentsRouter = require("../routes/appointmentsRouter");
 const applicantsRouter = require("../routes/applicantsRouter");
 
-app.use(cors());
 app.use("/api/v2", authRouter);
 app.use("/api/v2/users", isAuthenticated, requireAdmin, userRouter);
 app.use("/api/v2/appointments", isAuthenticated, appointmentsRouter);
